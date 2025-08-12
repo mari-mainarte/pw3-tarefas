@@ -1,5 +1,6 @@
 package br.com.etechas.tarefas.controllers;
 
+import br.com.etechas.tarefas.dto.TarefaResponseDTO;
 import br.com.etechas.tarefas.entity.Tarefa;
 import br.com.etechas.tarefas.services.TarefaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class TarefaController {
     private TarefaService tarefaService;
 
     @GetMapping
-    public ResponseEntity<List<Tarefa>> listarTarefas(){
+    public ResponseEntity<List<TarefaResponseDTO>> listarTarefas(){
         return new ResponseEntity<>(tarefaService.listarTarefas(), HttpStatus.OK);
     }
 }
