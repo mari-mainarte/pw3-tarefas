@@ -1,15 +1,16 @@
+//Mariana e Paola
+
 package br.com.etechas.tarefas.controllers;
 
 import br.com.etechas.tarefas.dto.TarefaResponseDTO;
-import br.com.etechas.tarefas.entity.Tarefa;
 import br.com.etechas.tarefas.services.TarefaService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.List;
 
 @RestController
@@ -23,4 +24,16 @@ public class TarefaController {
     public ResponseEntity<List<TarefaResponseDTO>> listarTarefas(){
         return new ResponseEntity<>(tarefaService.listarTarefas(), HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluirTarefaPorId(@PathVariable Long id){
+        try {
+            tarefaService.excluirPorId(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+    }
+
 }
