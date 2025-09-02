@@ -25,7 +25,7 @@ public class TarefaService {
         return tarefaMapper.toResponseDTOList(tarefaRepository.findAll());
     }
 
-    public void excluirPorId(Long id){
+    /*public void excluirPorId(Long id){
        Tarefa tarefa = tarefaRepository.findById(id)
                .orElseThrow(() -> new RuntimeException("Não há tarefa com id " + id));
 
@@ -34,5 +34,14 @@ public class TarefaService {
        }else{
            throw new RuntimeException("Tarefa em progresso ou concluída");
        }
+    }*/
+
+    public boolean deleteById(Long id){
+        var tarefa = tarefaRepository.findById(id);
+        if(tarefa.isPresent() && tarefa.get().isPending()){
+            tarefaRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/tarefas")
+@CrossOrigin(origins = "*")
 public class TarefaController {
 
     @Autowired
@@ -25,6 +26,7 @@ public class TarefaController {
         return new ResponseEntity<>(tarefaService.listarTarefas(), HttpStatus.OK);
     }
 
+    /*
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluirTarefaPorId(@PathVariable Long id){
         try {
@@ -34,6 +36,14 @@ public class TarefaController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+    }*/
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id){
+        if(tarefaService.deleteById(id)){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
 }
