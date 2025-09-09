@@ -1,5 +1,6 @@
 package br.com.etechas.tarefas.mapper;
 
+import br.com.etechas.tarefas.dto.TarefaPostDTO;
 import br.com.etechas.tarefas.dto.TarefaResponseDTO;
 import br.com.etechas.tarefas.entity.Tarefa;
 import org.mapstruct.Mapper;
@@ -13,4 +14,6 @@ public interface TarefaMapper{
     TarefaMapper INSTANCE = Mappers.getMapper(TarefaMapper.class);
 
     List<TarefaResponseDTO> toResponseDTOList(List<Tarefa> tarefa);
+
+    TarefaPostDTO toPostDTOClass(Tarefa tarefa);
 }

@@ -2,6 +2,7 @@
 
 package br.com.etechas.tarefas.controllers;
 
+import br.com.etechas.tarefas.dto.TarefaPostDTO;
 import br.com.etechas.tarefas.dto.TarefaResponseDTO;
 import br.com.etechas.tarefas.services.TarefaService;
 import jakarta.persistence.EntityNotFoundException;
@@ -44,6 +45,11 @@ public class TarefaController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<TarefaPostDTO> criarTarefa(@RequestBody TarefaPostDTO tarefaPostDTO){
+        return new ResponseEntity<>(tarefaService.criarTarefa(tarefaPostDTO), HttpStatus.OK);
     }
 
 }
