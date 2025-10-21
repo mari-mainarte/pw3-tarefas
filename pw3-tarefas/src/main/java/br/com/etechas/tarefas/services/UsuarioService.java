@@ -6,13 +6,17 @@ import br.com.etechas.tarefas.entity.Usuario;
 import br.com.etechas.tarefas.mapper.UsuarioMapper;
 import br.com.etechas.tarefas.repositorys.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class UsuarioService {
+public class UsuarioService implements UserDetailsService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
@@ -24,15 +28,14 @@ public class UsuarioService {
 
     public UsuarioResponseDTO registrar(UsuarioCadastroDTO cadastro){
 
-        Usuario usuarioName =  usuarioRepository.findByUsername(cadastro.username());
+        Optional<Usuario> usuarioName =  usuarioRepository.findByUsername(cadastro.username());
 
-        if(usuarioName != null){
+        if(usuarioName.isPresent()){
             throw new RuntimeException("Usuário com mesmo username já existe!");
         }
 
-        var entidade = usuarioMapper.toEntity(cadastro);
-
         var senhaCifrada = passwordEncoder.encode(cadastro.password());
+        var entidade = usuarioMapper.toEntity(cadastro);
 
         entidade.setPassword(senhaCifrada);
 
@@ -55,5 +58,11 @@ public class UsuarioService {
         List<UsuarioResponseDTO> usuariosResponseDTO = usuarioMapper.toUsuarioResponseDTOList(usuarios);
 
         return usuariosResponseDTO;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return usuarioRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException((
+                "Usuário" + username + " não encontrado")));
     }
 }
